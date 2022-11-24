@@ -19,6 +19,15 @@ const Users = () => {
     phone: ""
   });
 
+  const [modal, setModal] = useState(false);
+  const [unmountOnClose, setUnmountOnClose] = useState(true);
+
+  const toggle = () => setModal(!modal);
+  const changeUnmountOnClose = (e) => {
+    let { value } = e.target;
+    setUnmountOnClose(JSON.parse(value));
+  };
+
   useEffect(() => {
     fetch();
   }, []);
@@ -58,7 +67,10 @@ const Users = () => {
   return(
     <div>
       <h1>Users</h1>
-      <Modal isOpen={true}>
+      <Button color="danger" onClick={toggle}>
+        Add User
+      </Button>
+      <Modal  isOpen={modal} toggle={toggle} unmountOnClose={unmountOnClose}>
         <ModalHeader>
           Modal title
         </ModalHeader>
@@ -89,8 +101,14 @@ const Users = () => {
           }}/>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={()=> add(user)}>
+          <Button color="primary" onClick={()=> {
+            add(user);
+            toggle();
+          }}>
             Add
+          </Button>{' '}
+          <Button color="secondary" onClick={toggle}>
+            Cancel
           </Button>
         </ModalFooter>
       </Modal>
